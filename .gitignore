@@ -173,3 +173,6 @@ Thumbs.db
 examples/data/
 *.txt
 !requirements.txt
+
+# Claude Code instructions
+CLAUDE.md
