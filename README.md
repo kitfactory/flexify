@@ -1,32 +1,32 @@
-# =� Flexify
+# 🚀 Flexify
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Coverage](https://img.shields.io/badge/coverage-97%25-brightgreen.svg)](https://github.com/yourusername/flexify)
 
-**Flexify** is a lightweight, modular task processing framework for Python that makes it incredibly easy to build and execute workflows! <�
+**Flexify** is a lightweight, modular task processing framework for Python that makes it incredibly easy to build and execute workflows! 🎯
 
-## ( Why Flexify?
+## ✨ Why Flexify?
 
 Do you find yourself:
-- =) Writing the same processing patterns over and over?
-- =' Hard-coding workflows that are difficult to modify?
-- =� Struggling to visualize and track complex data pipelines?
-- <� Dealing with heavyweight workflow engines that are overkill for your needs?
+- 😩 Writing the same processing patterns over and over?
+- 🔧 Hard-coding workflows that are difficult to modify?
+- 📊 Struggling to visualize and track complex data pipelines?
+- 🏗️ Dealing with heavyweight workflow engines that are overkill for your needs?
 
 **Flexify makes it simple!** Define reusable modules, describe your workflow in YAML or JSON, and let Flexify handle the rest!
 
-## <� Key Features
+## 🎯 Key Features
 
-- **>� Modular Design**: Create reusable processing modules that can be combined in any way
-- **=� Simple Configuration**: Define workflows in human-readable YAML or JSON files
-- **= Flexible Data Flow**: Easy parameter mapping between modules
-- **=� Status Tracking**: Monitor workflow execution and module status in real-time
-- **= Pure Python**: No complex dependencies or external services required
-- **>� Well-Tested**: 97% test coverage with comprehensive test suite
-- **=� Rich Examples**: Ready-to-use example modules for text processing and math operations
+- **🧩 Modular Design**: Create reusable processing modules that can be combined in any way
+- **📝 Simple Configuration**: Define workflows in human-readable YAML or JSON files
+- **🔄 Flexible Data Flow**: Easy parameter mapping between modules
+- **📊 Status Tracking**: Monitor workflow execution and module status in real-time
+- **🐍 Pure Python**: No complex dependencies or external services required
+- **🧪 Well-Tested**: 97% test coverage with comprehensive test suite
+- **📚 Rich Examples**: Ready-to-use example modules for text processing and math operations
 
-## =� Quick Start
+## 🚀 Quick Start
 
 ### Installation
 
@@ -82,7 +82,7 @@ result = runner.run("greeting_workflow.yaml")
 print(result["greeting"])  # Output: Hello, Flexify User!
 ```
 
-## =� Documentation
+## 📖 Documentation
 
 ### Module Development
 
@@ -142,7 +142,7 @@ The `ModuleRegistry.get_or_import()` method handles:
 - Validation that classes inherit from `Module`
 - Caching of loaded modules for performance
 
-## =� Built-in Example Modules
+## 🛠️ Built-in Example Modules
 
 ### Text Processing
 - `TextReaderModule`: Read text files
@@ -154,24 +154,24 @@ The `ModuleRegistry.get_or_import()` method handles:
 - `StatisticsModule`: Calculate statistical measures
 - `FibonacciModule`: Generate Fibonacci sequences
 
-## =� System Requirements
+## 💻 System Requirements
 
 - **Python**: 3.10 or higher
 - **Dependencies**: PyYAML for YAML support
 - **OS**: Windows, macOS, Linux
 
-## > Contributing
+## 🤝 Contributing
 
 We welcome contributions! Please feel free to submit issues, fork the repository, and create pull requests.
 
-## =� License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## =O Acknowledgments
+## 🙏 Acknowledgments
 
-Built with d using modern Python best practices and clean architecture principles.
+Built with ❤️ using modern Python best practices and clean architecture principles.
 
 ---
 
-**Ready to make your workflows flexible?** Get started with Flexify today! =�
+**Ready to make your workflows flexible?** Get started with Flexify today! 🚀
