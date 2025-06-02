@@ -4,7 +4,7 @@ Flexifyフレームワークの例外クラス。
 """
 
 
-class ModuleError(Exception):
+class FlexifyException(Exception):
     """
     Base exception class for module execution errors.
     モジュール実行エラーの基底例外クラス。
@@ -22,8 +22,8 @@ class ModuleError(Exception):
     
     def __init__(self, message: str, module_name: str = None, original_error: Exception = None):
         """
-        Initialize ModuleError.
-        ModuleErrorを初期化します。
+        Initialize FlexifyException.
+        FlexifyExceptionを初期化します。
         
         Args:
             message (str): Error message

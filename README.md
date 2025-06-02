@@ -108,13 +108,13 @@ Workflows can be defined in YAML or JSON with:
 
 ### Error Handling
 
-Flexify provides comprehensive error handling through the `ModuleError` exception:
+Flexify provides comprehensive error handling through the `FlexifyException` exception:
 
 ```python
 try:
     runner = SimpleRunner()
     result = runner.run("workflow.yaml")
-except ModuleError as e:
+except FlexifyException as e:
     print(f"Error: {e}")                    # [ModuleName] Error message
     print(f"Failed module: {e.module_name}") # ModuleName
     if e.original_error:

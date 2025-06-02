@@ -173,7 +173,7 @@ sequenceDiagram
 3. 各パラメータについてvalidate_value()で検証する
 4. 必須パラメータの存在チェックを行う
 5. 型チェックと必要に応じて型変換を実行する
-6. 検証失敗時はModuleErrorを発生する
+6. 検証失敗時はFlexifyExceptionを発生する
 
 ### ユースケースフロー図
 
@@ -195,14 +195,14 @@ sequenceDiagram
             Validator-->>Module: True
         else 検証失敗
             Validator-->>Module: False
-            Module->>Module: ModuleError発生
+            Module->>Module: FlexifyException発生
         end
     end
     
     alt 全パラメータ検証成功
         Module->>Module: execute()実行
     else 検証失敗
-        Module-->>Runner: ModuleError
+        Module-->>Runner: FlexifyException
     end
 ```
 
@@ -210,7 +210,7 @@ sequenceDiagram
 
 - **ファイル**: `src/flexify/core/param_info.py`, `src/flexify/core/module.py`
 - **検証機能**: 型チェック、必須チェック、数値変換（int↔float）
-- **エラー処理**: 詳細なエラーメッセージ付きModuleError
+- **エラー処理**: 詳細なエラーメッセージ付きFlexifyException
 
 ## 機能06: エラーハンドリング
 
@@ -218,7 +218,7 @@ sequenceDiagram
 
 1. システム内で例外が発生する
 2. 例外の種類に応じて適切なエラーメッセージを生成する
-3. ModuleErrorまたは標準例外として上位に伝播する
+3. FlexifyExceptionまたは標準例外として上位に伝播する
 4. エラー情報をログ出力する
 5. 実行を停止し、適切な終了処理を行う
 
@@ -235,7 +235,7 @@ sequenceDiagram
     Component->>Error: 例外キャッチ
     Error->>Error: エラー種別判定
     
-    alt ModuleError
+    alt FlexifyException
         Error->>Logger: モジュールエラーログ
         Error-->>User: 詳細エラーメッセージ
     else FileNotFoundError
@@ -250,7 +250,7 @@ sequenceDiagram
 ### 実装詳細
 
 - **ファイル**: `src/flexify/core/exceptions.py`
-- **例外クラス**: `ModuleError`
+- **例外クラス**: `FlexifyException`
 - **エラー種別**: パラメータエラー、実行エラー、ファイルエラー
 
 ## 機能07: セッション管理
@@ -348,10 +348,10 @@ sequenceDiagram
 
 | 例外タイプ | 発生条件 | エラーメッセージ例 | 処理レベル |
 |---|---|---|---|
-| ModuleError | 必須パラメータ不足 | "Required input 'text' not found in session" | Module.validate_inputs |
-| ModuleError | 型検証エラー | "Input 'count' has invalid type. Expected int" | Module.validate_inputs |
-| ModuleError | モジュール実行エラー | "Unexpected error during module execution" | Module.safe_execute |
-| ModuleError | ランナー実行エラー | "Module execution failed" | SimpleRunner._execute_module |
+| FlexifyException | 必須パラメータ不足 | "Required input 'text' not found in session" | Module.validate_inputs |
+| FlexifyException | 型検証エラー | "Input 'count' has invalid type. Expected int" | Module.validate_inputs |
+| FlexifyException | モジュール実行エラー | "Unexpected error during module execution" | Module.safe_execute |
+| FlexifyException | ランナー実行エラー | "Module execution failed" | SimpleRunner._execute_module |
 | ImportError | モジュールインポート失敗 | "Cannot import module 'invalid.path'" | ModuleRegistry.get_or_import |
 | ValueError | 非Moduleクラス | "ClassName is not a subclass of Module" | ModuleRegistry.get_or_import |
 | FileNotFoundError | ワークフローファイル不在 | "No such file or directory" | SimpleRunner.run |
@@ -359,7 +359,7 @@ sequenceDiagram
 #### エラー情報の構造
 
 ```python
-class ModuleError(Exception):
+class FlexifyException(Exception):
     def __init__(self, message: str, module_name: str = None, original_error: Exception = None):
         # message: ユーザー向けエラーメッセージ
         # module_name: エラーが発生したモジュール名（デバッグ用）
@@ -371,7 +371,7 @@ class ModuleError(Exception):
 1. **即座に停止**: エラー発生時点でワークフロー実行を停止
 2. **ステータス更新**: 失敗モジュールのstatusを`Status.FAILED`に設定
 3. **情報保持**: RunnerStatusに失敗情報を記録
-4. **例外伝播**: ModuleErrorとして上位レイヤーに伝播
+4. **例外伝播**: FlexifyExceptionとして上位レイヤーに伝播
 
 ## 機能09: 将来機能 - Web API実行
 
@@ -463,7 +463,7 @@ sequenceDiagram
 | ワークフロー実行 | ✅ 完了 | ✅ 完了 | SimpleRunner |
 | 進捗状況確認 | ✅ 完了 | ✅ 完了 | RunnerStatus |
 | パラメータ検証 | ✅ 完了 | ✅ 完了 | 型変換対応 |
-| エラーハンドリング | ✅ 完了 | ✅ 完了 | ModuleError |
+| エラーハンドリング | ✅ 完了 | ✅ 完了 | FlexifyException |
 | セッション管理 | ✅ 完了 | ✅ 完了 | Dict型実装 |
 | モジュール検索 | ✅ 完了 | ✅ 完了 | 動的検出 |
 | Web API実行 | ⏳ 未実装 | ⏳ 未実装 | 将来機能 |

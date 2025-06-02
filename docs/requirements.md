@@ -41,7 +41,7 @@ Flexifyは、YAML/JSONファイルで定義されたワークフローを柔軟�
 | UC-03 | ワークフロー実行 | Runnerを使ってワークフローを実行する | `runner = SimpleRunner(); runner.run("workflow.yaml")` |
 | UC-04 | 進捗状況確認 | 実行中のワークフローの進捗とステータスを確認する | `status = runner.get_status(); print(status.current_module)` |
 | UC-05 | パラメータ検証 | モジュールの入出力パラメータを自動検証する | `param_info = MyModule.get_param_info()` |
-| UC-06 | エラーハンドリング | エラー発生時の適切な処理とログ出力 | `try: runner.run() except ModuleError as e: ...` |
+| UC-06 | エラーハンドリング | エラー発生時の適切な処理とログ出力 | `try: runner.run() except FlexifyException as e: ...` |
 | UC-07 | セッション管理 | モジュール間でのデータ共有と管理 | `session["key"] = value; next_module.execute(session)` |
 | UC-08 | モジュール検索 | 利用可能なモジュールの自動検出と一覧表示 | `modules = ModuleRegistry.discover_modules()` |
 | UC-09 | 将来：Web API実行 | HTTP経由でワークフローを実行・管理する | `POST /workflows/run {"workflow": "path/to/workflow.yaml"}` |

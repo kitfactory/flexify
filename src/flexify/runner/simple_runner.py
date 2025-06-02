@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 from .runner import Runner
 from .models import WorkflowConfig, RunnerStatus, ModuleConfig
-from ..core import Module, ModuleError, Status
+from ..core import Module, FlexifyException, Status
 from ..registry import ModuleRegistry, get_global_registry
 
 
@@ -57,11 +57,11 @@ class SimpleRunner(Runner):
         Raises:
             FileNotFoundError: If workflow file doesn't exist
             ValueError: If workflow configuration is invalid
-            ModuleError: If module execution fails
+            FlexifyException: If module execution fails
         例外:
             FileNotFoundError: ワークフローファイルが存在しない場合
             ValueError: ワークフロー設定が無効な場合
-            ModuleError: モジュール実行が失敗した場合
+            FlexifyException: モジュール実行が失敗した場合
         """
         path = Path(workflow_path)
         if not path.exists():
@@ -90,10 +90,10 @@ class SimpleRunner(Runner):
             
         Raises:
             ValueError: If workflow configuration is invalid
-            ModuleError: If module execution fails
+            FlexifyException: If module execution fails
         例外:
             ValueError: ワークフロー設定が無効な場合
-            ModuleError: モジュール実行が失敗した場合
+            FlexifyException: モジュール実行が失敗した場合
         """
         # Initialize status
         self._current_status = RunnerStatus(
@@ -122,10 +122,10 @@ class SimpleRunner(Runner):
         except Exception as e:
             # Mark workflow as failed
             self._current_status.end_time = datetime.now()
-            if isinstance(e, ModuleError):
+            if isinstance(e, FlexifyException):
                 raise
             else:
-                raise ModuleError(
+                raise FlexifyException(
                     f"Workflow execution failed: {str(e)}",
                     module_name=self._current_status.current_module,
                     original_error=e
@@ -280,10 +280,10 @@ class SimpleRunner(Runner):
             
         except Exception as e:
             self._current_status.module_statuses[config.name] = Status.FAILED
-            if isinstance(e, ModuleError):
+            if isinstance(e, FlexifyException):
                 raise
             else:
-                raise ModuleError(
+                raise FlexifyException(
                     f"Module execution failed: {str(e)}",
                     module_name=config.name,
                     original_error=e

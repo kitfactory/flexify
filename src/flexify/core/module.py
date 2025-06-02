@@ -7,7 +7,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any, List, Type
 from .status import Status
 from .param_info import ParamInfo
-from .exceptions import ModuleError
+from .exceptions import FlexifyException
 
 
 class Module(ABC):
@@ -56,9 +56,9 @@ class Module(ABC):
             Dict[str, Any]: 出力を含む更新されたセッションデータ
             
         Raises:
-            ModuleError: If an error occurs during execution
+            FlexifyException: If an error occurs during execution
         例外:
-            ModuleError: 実行中にエラーが発生した場合
+            FlexifyException: 実行中にエラーが発生した場合
         """
         pass
     
@@ -92,9 +92,9 @@ class Module(ABC):
             session (Dict[str, Any]): 検証するセッションデータ
             
         Raises:
-            ModuleError: If required inputs are missing or invalid
+            FlexifyException: If required inputs are missing or invalid
         例外:
-            ModuleError: 必要な入力が欠落しているか無効な場合
+            FlexifyException: 必要な入力が欠落しているか無効な場合
         """
         param_infos = self.get_param_info()
         
@@ -102,13 +102,13 @@ class Module(ABC):
             # Handle input parameters - they should directly match session keys
             if param.name in session:
                 if not param.validate_value(session[param.name]):
-                    raise ModuleError(
+                    raise FlexifyException(
                         f"Input '{param.name}' has invalid type. Expected {param.type.__name__}",
                         module_name=self.__class__.__name__
                     )
             elif param.required and not param.name.startswith("output_"):
                 # If it's required and not an output parameter, it must be present
-                raise ModuleError(
+                raise FlexifyException(
                     f"Required input '{param.name}' not found in session",
                     module_name=self.__class__.__name__
                 )
@@ -129,9 +129,9 @@ class Module(ABC):
             Dict[str, Any]: 更新されたセッションデータ
             
         Raises:
-            ModuleError: If execution fails
+            FlexifyException: If execution fails
         例外:
-            ModuleError: 実行が失敗した場合
+            FlexifyException: 実行が失敗した場合
         """
         try:
             self.status = Status.RUNNING
@@ -139,12 +139,12 @@ class Module(ABC):
             result = self.execute(session)
             self.status = Status.SUCCESS
             return result
-        except ModuleError:
+        except FlexifyException:
             self.status = Status.FAILED
             raise
         except Exception as e:
             self.status = Status.FAILED
-            raise ModuleError(
+            raise FlexifyException(
                 f"Unexpected error during module execution: {str(e)}",
                 module_name=self.__class__.__name__,
                 original_error=e

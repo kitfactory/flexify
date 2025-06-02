@@ -54,9 +54,9 @@
    - architecture.md: Dict型を返す
    - 決定: Dict型（更新されたsession）を返す
 
-5. **ModuleError例外クラス**
+5. **FlexifyException例外クラス**
    - requirements.mdで言及されているが定義がない
-   - 決定: ドメイン層に追加する
+   - 決定: ドメイン層に追加する（FlexifyExceptionとして実装済み）
 
 6. **WorkflowParserインターフェース**
    - YAMLParser/JSONParserの共通インターフェースとして明確化が必要

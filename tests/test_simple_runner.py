@@ -8,7 +8,7 @@ import json
 import yaml
 from pathlib import Path
 from typing import Dict, Any, List
-from flexify.core import Module, ParamInfo, Status, ModuleError
+from flexify.core import Module, ParamInfo, Status, FlexifyException
 from flexify.runner import SimpleRunner, WorkflowConfig, ModuleConfig
 from flexify.registry import ModuleRegistry
 
@@ -205,7 +205,7 @@ class TestSimpleRunner:
             ]
         )
         
-        with pytest.raises(ModuleError) as exc_info:
+        with pytest.raises(FlexifyException) as exc_info:
             runner.run_from_config(config)
         
         assert "Test error from module" in str(exc_info.value)

@@ -5,7 +5,7 @@ Module抽象基底クラスのテスト。
 
 import pytest
 from typing import Dict, Any, List
-from flexify.core import Module, ParamInfo, Status, ModuleError
+from flexify.core import Module, ParamInfo, Status, FlexifyException
 
 
 class TestModuleImpl(Module):
@@ -115,7 +115,7 @@ class TestModuleClass:
         module = TestModuleImpl()
         session = {}  # Missing required "input_value"
         
-        with pytest.raises(ModuleError) as exc_info:
+        with pytest.raises(FlexifyException) as exc_info:
             module.safe_execute(session)
         
         assert module.status == Status.FAILED
@@ -130,7 +130,7 @@ class TestModuleClass:
         module = TestModuleImpl()
         session = {"input_value": "not an int"}
         
-        with pytest.raises(ModuleError) as exc_info:
+        with pytest.raises(FlexifyException) as exc_info:
             module.safe_execute(session)
         
         assert module.status == Status.FAILED
@@ -144,7 +144,7 @@ class TestModuleClass:
         module = ErrorModule()
         session = {}
         
-        with pytest.raises(ModuleError) as exc_info:
+        with pytest.raises(FlexifyException) as exc_info:
             module.safe_execute(session)
         
         assert module.status == Status.FAILED
@@ -165,7 +165,7 @@ class TestModuleClass:
         
         # Test with missing input
         session = {}
-        with pytest.raises(ModuleError) as exc_info:
+        with pytest.raises(FlexifyException) as exc_info:
             module.validate_inputs(session)
         assert "Required input 'input_value' not found" in str(exc_info.value)
     

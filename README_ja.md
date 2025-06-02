@@ -108,13 +108,13 @@ print(result["greeting"])  # 出力: こんにちは、Flexifyユーザーさん
 
 ### エラーハンドリング
 
-Flexifyは`ModuleError`例外を通じて包括的なエラーハンドリングを提供します：
+Flexifyは`FlexifyException`例外を通じて包括的なエラーハンドリングを提供します：
 
 ```python
 try:
     runner = SimpleRunner()
     result = runner.run("workflow.yaml")
-except ModuleError as e:
+except FlexifyException as e:
     print(f"エラー: {e}")                    # [モジュール名] エラーメッセージ
     print(f"失敗モジュール: {e.module_name}") # モジュール名
     if e.original_error:

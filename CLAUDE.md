@@ -32,6 +32,9 @@ pytest --cov=flexify
 
 # Build the package
 uv build
+
+# Upload the package
+uvx twine upload dist/* -u $PYPI_TOKEN
 ```
 
 # プロジェクトの構成

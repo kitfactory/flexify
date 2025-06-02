@@ -65,7 +65,7 @@ graph TB
 | Module | `src/flexify/core/module.py` | 実行可能なモジュールの抽象基底クラス | ドメイン層 |
 | ParamInfo | `src/flexify/core/param_info.py` | モジュールのパラメータ情報を保持するデータクラス | ドメイン層 |
 | Status | `src/flexify/core/status.py` | モジュールの実行状態を表すEnumクラス | ドメイン層 |
-| ModuleError | `src/flexify/core/exceptions.py` | モジュール実行時のエラーを表す例外クラス | ドメイン層 |
+| FlexifyException | `src/flexify/core/exceptions.py` | モジュール実行時のエラーを表す例外クラス | ドメイン層 |
 | Runner | `src/flexify/runner/runner.py` | ワークフロー実行のインターフェース | アプリケーション層 |
 | SimpleRunner | `src/flexify/runner/simple_runner.py` | Runnerの基本実装 | アプリケーション層 |
 | ModuleRegistry | `src/flexify/registry/module_registry.py` | モジュールの検索・登録を管理 | アプリケーション層 |
@@ -169,7 +169,7 @@ classDiagram
 
 ## エラーハンドリング設計
 
-### ModuleError例外階層
+### FlexifyException例外階層
 
 ```mermaid
 classDiagram
@@ -177,7 +177,7 @@ classDiagram
         <<Python標準>>
     }
     
-    class ModuleError {
+    class FlexifyException {
         +message: str
         +module_name: str
         +original_error: Exception
@@ -185,22 +185,22 @@ classDiagram
         +__str__() str
     }
     
-    Exception <|-- ModuleError
+    Exception <|-- FlexifyException
 ```
 
 ### エラー伝播フロー
 
-1. **モジュールレベル**: `Module.safe_execute()` でエラーをキャッチし、ModuleErrorでラップ
-2. **ランナーレベル**: `SimpleRunner._execute_module()` でModuleErrorを再送出または新規作成
+1. **モジュールレベル**: `Module.safe_execute()` でエラーをキャッチし、FlexifyExceptionでラップ
+2. **ランナーレベル**: `SimpleRunner._execute_module()` でFlexifyExceptionを再送出または新規作成
 3. **ワークフローレベル**: `SimpleRunner.run_from_config()` で最終的なエラーハンドリング
 
 ### エラー情報の保持
 
 | レベル | 保持される情報 | 用途 |
 |---|---|---|
-| ModuleError.message | エラーの詳細メッセージ | ユーザーへの通知 |
-| ModuleError.module_name | 失敗したモジュール名 | デバッグ・ログ |
-| ModuleError.original_error | 元の例外オブジェクト | 詳細なスタックトレース |
+| FlexifyException.message | エラーの詳細メッセージ | ユーザーへの通知 |
+| FlexifyException.module_name | 失敗したモジュール名 | デバッグ・ログ |
+| FlexifyException.original_error | 元の例外オブジェクト | 詳細なスタックトレース |
 | RunnerStatus.module_statuses | 各モジュールの実行状態 | 進捗確認・障害分析 |
 
 ## モジュール検出とロード機構

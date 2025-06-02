@@ -40,11 +40,11 @@ class Runner(ABC):
         Raises:
             FileNotFoundError: If workflow file doesn't exist
             ValueError: If workflow configuration is invalid
-            ModuleError: If module execution fails
+            FlexifyException: If module execution fails
         例外:
             FileNotFoundError: ワークフローファイルが存在しない場合
             ValueError: ワークフロー設定が無効な場合
-            ModuleError: モジュール実行が失敗した場合
+            FlexifyException: モジュール実行が失敗した場合
         """
         pass
     
@@ -66,10 +66,10 @@ class Runner(ABC):
             
         Raises:
             ValueError: If workflow configuration is invalid
-            ModuleError: If module execution fails
+            FlexifyException: If module execution fails
         例外:
             ValueError: ワークフロー設定が無効な場合
-            ModuleError: モジュール実行が失敗した場合
+            FlexifyException: モジュール実行が失敗した場合
         """
         pass
     
