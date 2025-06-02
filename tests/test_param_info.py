@@ -48,20 +48,21 @@ class TestParamInfo:
         assert param.required is False
         assert param.default == 42
     
-    def test_optional_param_without_default_raises_error(self):
+    def test_optional_param_with_none_default_allowed(self):
         """
-        Test that optional parameter without default raises ValueError.
-        デフォルト値なしのオプションパラメータがValueErrorを発生させることをテストします。
+        Test that optional parameter with None default is now allowed.
+        デフォルト値がNoneのオプションパラメータが許可されることをテストします。
         """
-        with pytest.raises(ValueError) as exc_info:
-            ParamInfo(
-                name="invalid_param",
-                type=str,
-                required=False,
-                default=None
-            )
+        # This should not raise an error anymore
+        param = ParamInfo(
+            name="optional_param",
+            type=str,
+            required=False,
+            default=None
+        )
         
-        assert "must have a default value" in str(exc_info.value)
+        assert param.default is None
+        assert param.required is False
     
     def test_validate_value_with_correct_type(self):
         """
@@ -112,10 +113,10 @@ class TestParamInfo:
         Test ParamInfo with different types.
         異なる型でのParamInfoをテストします。
         """
-        # Test with int
+        # Test with int (numeric conversion is now allowed)
         int_param = ParamInfo(name="int_param", type=int, required=True)
         assert int_param.validate_value(42) is True
-        assert int_param.validate_value("42") is False
+        assert int_param.validate_value("42") is True  # String that can be converted to int
         
         # Test with list
         list_param = ParamInfo(name="list_param", type=list, required=True)

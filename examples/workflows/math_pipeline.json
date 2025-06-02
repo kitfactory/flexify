@@ -10,14 +10,14 @@
   "modules": [
     {
       "name": "calculate_statistics",
-      "class_name": "flexify.examples.math_modules.StatisticsModule",
+      "class_name": "math_modules.StatisticsModule",
       "inputs": {
         "numbers": "numbers"
       }
     },
     {
       "name": "calculate_sum_squared",
-      "class_name": "flexify.examples.math_modules.CalculatorModule",
+      "class_name": "math_modules.CalculatorModule",
       "inputs": {
         "a": "sum",
         "b": "sum"
@@ -31,7 +31,7 @@
     },
     {
       "name": "calculate_mean_plus_stddev",
-      "class_name": "flexify.examples.math_modules.CalculatorModule",
+      "class_name": "math_modules.CalculatorModule",
       "inputs": {
         "a": "mean",
         "b": "std_dev"
@@ -45,7 +45,7 @@
     },
     {
       "name": "generate_fibonacci",
-      "class_name": "flexify.examples.math_modules.FibonacciModule",
+      "class_name": "math_modules.FibonacciModule",
       "inputs": {
         "n": "count"
       }

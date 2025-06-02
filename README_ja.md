@@ -142,17 +142,54 @@ modules:
 - `Module`クラスを継承していることの検証
 - パフォーマンス向上のための読み込み済みモジュールのキャッシュ
 
-## 🛠️ 組み込み例モジュール
+## 🛠️ 組み込みモジュール
 
-### テキスト処理
+### コア制御フローモジュール
+- `LoopModule`: 配列を反復し、各要素に対してサブワークフローを実行
+- `CaseModule`: 条件マッチングに基づいて異なるワークフローを実行
+
+### テキスト処理モジュール
 - `TextReaderModule`: テキストファイルの読み込み
 - `TextTransformModule`: テキスト変換（大文字、小文字、タイトル、逆順）
 - `WordCountModule`: テキスト統計の計算
 
-### 数学演算
+### 数学演算モジュール
 - `CalculatorModule`: 基本的な算術演算
 - `StatisticsModule`: 統計指標の計算
 - `FibonacciModule`: フィボナッチ数列の生成
+
+### 制御フローの例
+
+#### LoopModule
+```yaml
+modules:
+  - name: process_array
+    class_name: flexify.core.LoopModule
+    params:
+      workflow:
+        modules:
+          - name: square
+            class_name: flexify.examples.math_modules.CalculatorModule
+            params: {operation: multiply}
+            inputs: {a: item, b: item}
+    inputs:
+      array: numbers
+```
+
+#### CaseModule
+```yaml
+modules:
+  - name: process_by_type
+    class_name: flexify.core.CaseModule
+    params:
+      cases:
+        add:
+          modules: [{name: add_op, class_name: ..., params: {operation: add}}]
+        multiply:
+          modules: [{name: mult_op, class_name: ..., params: {operation: multiply}}]
+    inputs:
+      value: operation_type
+```
 
 ## 💻 システム要件
 

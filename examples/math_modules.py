@@ -5,7 +5,11 @@ Mathematical operation example modules.
 
 from typing import Dict, Any, List
 import math
-from ..core import Module, ParamInfo
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+
+from flexify.core import Module, ParamInfo
 
 
 class CalculatorModule(Module):

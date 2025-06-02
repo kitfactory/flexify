@@ -6,7 +6,7 @@ modules:
   # Calculate (a + b) * c
   # First: a + b
   - name: add_step
-    class_name: flexify.examples.math_modules.CalculatorModule
+    class_name: math_modules.CalculatorModule
     params:
       operation: add
       a: 10
@@ -16,7 +16,7 @@ modules:
 
   # Then: result * c
   - name: multiply_step
-    class_name: flexify.examples.math_modules.CalculatorModule
+    class_name: math_modules.CalculatorModule
     inputs:
       a: sum_result
     params:
@@ -27,7 +27,7 @@ modules:
 
   # Calculate square root of the final result
   - name: sqrt_step
-    class_name: flexify.examples.math_modules.CalculatorModule
+    class_name: math_modules.CalculatorModule
     inputs:
       a: final_result
     params:

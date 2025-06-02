@@ -4,7 +4,11 @@ Text processing example modules.
 """
 
 from typing import Dict, Any, List
-from ..core import Module, ParamInfo
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
+
+from flexify.core import Module, ParamInfo
 
 
 class TextReaderModule(Module):

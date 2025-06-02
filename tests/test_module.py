@@ -14,11 +14,22 @@ class TestModuleImpl(Module):
     テスト目的のModuleのテスト実装。
     """
     
+    def __init__(self):
+        super().__init__()
+        self._should_raise_module_error = False
+        self._should_raise_generic_error = False
+    
     def execute(self, session: Dict[str, Any]) -> Dict[str, Any]:
         """
         Simple test execution that adds output_value to session.
         session に output_value を追加する単純なテスト実行。
         """
+        if self._should_raise_module_error:
+            raise FlexifyException("Test module error", module_name=self.__class__.__name__)
+        
+        if self._should_raise_generic_error:
+            raise ValueError("Test generic error")
+        
         input_value = session.get("input_value", 0)
         session["output_value"] = input_value * 2
         return session
@@ -191,3 +202,66 @@ class TestModuleClass:
         assert params[0].required is True
         assert params[1].name == "output_value"
         assert params[1].required is False
+    
+    def test_module_status_property(self):
+        """Test module status property."""
+        module = TestModuleImpl()
+        
+        # Initial status should be PENDING
+        assert module.status == Status.PENDING
+        
+        # Should be able to set status
+        module.status = Status.RUNNING
+        assert module.status == Status.RUNNING
+    
+    def test_module_str_representation(self):
+        """Test module string representation."""
+        module = TestModuleImpl()
+        str_repr = str(module)
+        assert "TestModuleImpl" in str_repr
+    
+    def test_validate_inputs_with_edge_cases(self):
+        """Test validate_inputs with various edge cases."""
+        module = TestModuleImpl()
+        
+        # Test with numeric conversion
+        session = {"input_value": "42"}  # String that can convert to int
+        # Should not raise exception due to numeric conversion
+        module.validate_inputs(session)
+        
+        # Test with float conversion
+        session = {"input_value": 42.5}  # Float value
+        module.validate_inputs(session)
+        
+        # Test with None for optional parameter
+        session = {"input_value": 42, "output_value": None}
+        # Should not raise exception for optional param with None
+        module.validate_inputs(session)
+    
+    def test_safe_execute_with_module_exception(self):
+        """Test safe_execute handling of FlexifyException."""
+        module = TestModuleImpl()
+        module._should_raise_module_error = True
+        
+        session = {"input_value": 10}
+        
+        with pytest.raises(FlexifyException):
+            module.safe_execute(session)
+        
+        # Status should be FAILED
+        assert module.status == Status.FAILED
+    
+    def test_safe_execute_with_generic_exception(self):
+        """Test safe_execute handling of generic exceptions."""
+        module = TestModuleImpl()
+        module._should_raise_generic_error = True
+        
+        session = {"input_value": 10}
+        
+        with pytest.raises(FlexifyException) as exc_info:
+            module.safe_execute(session)
+        
+        # Should wrap generic exception in FlexifyException
+        assert "Unexpected error during module execution" in str(exc_info.value)
+        assert exc_info.value.original_error is not None
+        assert module.status == Status.FAILED

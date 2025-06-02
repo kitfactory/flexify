@@ -10,7 +10,10 @@ from flexify.runner import SimpleRunner
 from flexify.registry import get_global_registry
 
 # Import example modules to register them
-from flexify.examples import text_modules, math_modules
+import sys
+import os
+sys.path.append(os.path.dirname(__file__))
+import text_modules, math_modules
 
 
 def print_result(name: str, result: dict):
@@ -137,6 +140,92 @@ def run_programmatic_example():
     print(f"  Range: {result.get('range')}")
 
 
+def run_control_flow_examples():
+    """
+    Run control flow examples.
+    制御フロー例を実行します。
+    """
+    print("\n" + "="*70)
+    print("Running Control Flow Examples")
+    print("="*70)
+    
+    # Simple loop example with numbers
+    print("\n--- Simple Loop Example ---")
+    runner = SimpleRunner()
+    
+    from flexify.runner import WorkflowConfig, ModuleConfig
+    
+    # Create a simple loop that squares numbers
+    config = WorkflowConfig(
+        name="simple_loop",
+        initial_session={"numbers": [1, 2, 3, 4, 5]},
+        modules=[
+            ModuleConfig(
+                name="square_numbers",
+                class_name="flexify.core.LoopModule",
+                params={
+                    "workflow": {
+                        "modules": [{
+                            "name": "square",
+                            "class_name": "math_modules.CalculatorModule",
+                            "params": {"operation": "multiply"},
+                            "inputs": {"a": "item", "b": "item"}
+                        }]
+                    }
+                },
+                inputs={"array": "numbers"}
+            )
+        ]
+    )
+    
+    result = runner.run_from_config(config)
+    print(f"Original numbers: {config.initial_session['numbers']}")
+    print(f"Squared results: {[r['result'] for r in result['loop_results']]}")
+    
+    # Case example
+    print("\n--- Case Example ---")
+    for value, expected in [("add", 15), ("multiply", 50), ("unknown", 0)]:
+        case_config = WorkflowConfig(
+            name="case_example",
+            initial_session={"operation": value},
+            modules=[
+                ModuleConfig(
+                    name="operation_case",
+                    class_name="flexify.core.CaseModule",
+                    params={
+                        "cases": {
+                            "add": {
+                                "modules": [{
+                                    "name": "add_op",
+                                    "class_name": "math_modules.CalculatorModule",
+                                    "params": {"operation": "add", "a": 10, "b": 5}
+                                }]
+                            },
+                            "multiply": {
+                                "modules": [{
+                                    "name": "mult_op",
+                                    "class_name": "math_modules.CalculatorModule",
+                                    "params": {"operation": "multiply", "a": 10, "b": 5}
+                                }]
+                            }
+                        },
+                        "default": {
+                            "modules": [{
+                                "name": "default_op",
+                                "class_name": "math_modules.CalculatorModule",
+                                "params": {"operation": "add", "a": 0, "b": 0}
+                            }]
+                        }
+                    },
+                    inputs={"value": "operation"}
+                )
+            ]
+        )
+        
+        result = runner.run_from_config(case_config)
+        print(f"Operation '{value}': result = {result.get('result', 'N/A')} (expected: {expected})")
+
+
 def main():
     """
     Run all examples.
@@ -164,6 +253,11 @@ def main():
         run_programmatic_example()
     except Exception as e:
         print(f"Error in programmatic example: {e}")
+    
+    try:
+        run_control_flow_examples()
+    except Exception as e:
+        print(f"Error in control flow examples: {e}")
     
     print("\n" + "="*70)
     print("All examples completed!")

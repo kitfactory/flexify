@@ -142,17 +142,54 @@ The `ModuleRegistry.get_or_import()` method handles:
 - Validation that classes inherit from `Module`
 - Caching of loaded modules for performance
 
-## 🛠️ Built-in Example Modules
+## 🛠️ Built-in Modules
 
-### Text Processing
+### Core Control Flow Modules
+- `LoopModule`: Iterate over arrays and execute sub-workflows for each element
+- `CaseModule`: Execute different workflows based on condition matching
+
+### Text Processing Modules
 - `TextReaderModule`: Read text files
 - `TextTransformModule`: Transform text (upper, lower, title, reverse)
 - `WordCountModule`: Calculate text statistics
 
-### Math Operations
+### Math Operations Modules
 - `CalculatorModule`: Basic arithmetic operations
 - `StatisticsModule`: Calculate statistical measures
 - `FibonacciModule`: Generate Fibonacci sequences
+
+### Control Flow Examples
+
+#### Loop Module
+```yaml
+modules:
+  - name: process_array
+    class_name: flexify.core.LoopModule
+    params:
+      workflow:
+        modules:
+          - name: square
+            class_name: flexify.examples.math_modules.CalculatorModule
+            params: {operation: multiply}
+            inputs: {a: item, b: item}
+    inputs:
+      array: numbers
+```
+
+#### Case Module
+```yaml
+modules:
+  - name: process_by_type
+    class_name: flexify.core.CaseModule
+    params:
+      cases:
+        add:
+          modules: [{name: add_op, class_name: ..., params: {operation: add}}]
+        multiply:
+          modules: [{name: mult_op, class_name: ..., params: {operation: multiply}}]
+    inputs:
+      value: operation_type
+```
 
 ## 💻 System Requirements
 
